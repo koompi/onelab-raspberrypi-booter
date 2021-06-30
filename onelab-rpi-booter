@@ -144,7 +144,7 @@ do
 	qdbus $dbusRef Set "" value 4
 	qdbus $dbusRef setLabelText "កំពុងបញ្ចូលឯកសារចូល SD Card"
 
-	echo $password | sudo -S tar --lzop -xvpf $selected_file -C /mnt/
+	echo $password | sudo -S tar -xvpf $selected_file -C /mnt/
 
 	qdbus $dbusRef Set "" value 5
 	qdbus $dbusRef setLabelText "កំពុងរៀបចំបញ្ចប់ប្រត្តិបត្តិការ"
