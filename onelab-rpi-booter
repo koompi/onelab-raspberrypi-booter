@@ -123,9 +123,9 @@ do
 	qdbus $dbusRef setLabelText "កំពុងចែក Partition នៅលើ SD Card"
 
 	echo $password | sudo -S parted $sdcard mklabel msdos --script
-	echo $password | sudo -S parted /dev/sdb mkpart primary fat32 0% 106M --script
-	echo $password | sudo -S parted /dev/sdb mkpart primary ext4 106M 80% --script
-	echo $password | sudo -S parted /dev/sdb mkpart primary linux-swap 80% 100% --script
+	echo $password | sudo -S parted $sdcard mkpart primary fat32 0% 106M --script
+	echo $password | sudo -S parted $sdcard mkpart primary ext4 106M 80% --script
+	echo $password | sudo -S parted $sdcard mkpart primary linux-swap 80% 100% --script
 
 	qdbus $dbusRef Set "" value 2
 	qdbus $dbusRef setLabelText "កំពុង Format Partition នៅលើ SD Card"
