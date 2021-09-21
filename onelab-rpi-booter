@@ -122,6 +122,9 @@ do
 	qdbus $dbusRef Set "" value 1
 	qdbus $dbusRef setLabelText "កំពុងចែក Partition នៅលើ SD Card"
 
+	echo $password | sudo -S umount "$sdcard""1" &>/dev/null
+	echo $password | sudo -S umount "$sdcard""2" &>/dev/null
+
 	echo $password | sudo -S parted $sdcard mklabel msdos --script
 	echo $password | sudo -S parted $sdcard mkpart primary fat32 0% 106M --script
 	echo $password | sudo -S parted $sdcard mkpart primary ext4 106M 80% --script
@@ -134,25 +137,31 @@ do
 	echo $password | sudo -S mkfs.vfat -F32 "$sdcard""1"
 	echo $password | sudo -S mkswap "$sdcard""3"
 
+	rootuuid=$(ls -lah /dev/disk/by-uuid | grep $(echo "$sdcard""2" | awk -F'/' '{printf $3}') | awk -F' ' '{printf $9}')
+
 	qdbus $dbusRef Set "" value 3
 	qdbus $dbusRef setLabelText "កំពុង Mount Partitions នៅលើ SD Card"
 
-	echo $password | sudo -S mount "$sdcard""2" /mnt/
-	echo $password | sudo -S mkdir -p /mnt/boot
-	echo $password | sudo -S mount "$sdcard""1" /mnt/boot
+	echo $password | sudo -S rm -rf /tmp/"$rootuuid"
+	echo $password | sudo -S mkdir -p /tmp/"$rootuuid"
+	echo $password | sudo -S mount "$sdcard""2" /tmp/"$rootuuid"
+	echo $password | sudo -S mkdir /tmp/"$rootuuid"/boot
+	echo $password | sudo -S mount "$sdcard""1" /tmp/"$rootuuid"/boot
 
 	qdbus $dbusRef Set "" value 4
 	qdbus $dbusRef setLabelText "កំពុងបញ្ចូលឯកសារចូល SD Card"
 
-	echo $password | sudo -S tar -xvpf $selected_file -C /mnt/
+	# echo $password | sudo -S tar -xvpf $selected_file -C /mnt/
+	( pv "$selected_file" -f | sudo tar -C /tmp/"$rootuuid" --lzop -xpf- ) >/tmp/"$rootuuid"-log.txt 2>&1
 
 	qdbus $dbusRef Set "" value 5
 	qdbus $dbusRef setLabelText "កំពុងរៀបចំបញ្ចប់ប្រត្តិបត្តិការ"
 
 	sync
 
-	echo $password | sudo -S umount /mnt/boot
-	echo $password | sudo -S umount /mnt/
+	echo $password | sudo -S umount "/tmp/$rootuuid/boot"
+	echo $password | sudo -S umount "/tmp/$rootuuid"
+	echo $password | sudo -S rm -rf /tmp/"$rootuuid"
 
 	qdbus $dbusRef close
 
@@ -161,8 +170,3 @@ do
 	break
 
 done
-
-
-
-
-
