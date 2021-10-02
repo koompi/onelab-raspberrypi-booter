@@ -151,8 +151,12 @@ do
 	qdbus $dbusRef Set "" value 4
 	qdbus $dbusRef setLabelText "កំពុងបញ្ចូលឯកសារចូល SD Card"
 
-	# echo $password | sudo -S tar -xvpf $selected_file -C /mnt/
-	( pv "$selected_file" -f | sudo tar -C /tmp/"$rootuuid" --lzop -xpf- ) >/tmp/"$rootuuid"-log.txt 2>&1
+	if pp [[ "$selected_file" -eq "*.lz4" ]];
+    then
+	    ( pv "$selected_file" -f | sudo tar -C /tmp/"$rootuuid" -I lz4 -xpf- ) >/tmp/"$rootuuid"-log.txt 2>&1
+    else 
+        ( pv "$selected_file" -f | sudo tar -C /tmp/"$rootuuid" -xapf- ) >/tmp/"$rootuuid"-log.txt 2>&1
+    fi
 
 	qdbus $dbusRef Set "" value 5
 	qdbus $dbusRef setLabelText "កំពុងរៀបចំបញ្ចប់ប្រត្តិបត្តិការ"
