@@ -119,9 +119,11 @@ do
 
 	sdcard=$(echo $selected_disk | sed -e 's/_/ /g' | awk -F' ' '{printf $2}' | awk -F':' '{printf $1}')
 
-	qdbus $dbusRef Set "" value 1
-	qdbus $dbusRef setLabelText "កំពុងចែក Partition នៅលើ SD Card"
+    compression_type=$(echo "$selected_file" | awk -F'.' '{printf $NF}')
 
+	qdbus $dbusRef Set "" value 1
+    qdbus $dbusRef setLabelText "កំពុងចែក Partition នៅលើ SD Card"
+ 
 	echo $password | sudo -S umount "$sdcard""1" &>/dev/null
 	echo $password | sudo -S umount "$sdcard""2" &>/dev/null
 
@@ -151,11 +153,17 @@ do
 	qdbus $dbusRef Set "" value 4
 	qdbus $dbusRef setLabelText "កំពុងបញ្ចូលឯកសារចូល SD Card"
 
-	if pp [[ "$selected_file" -eq "*.lz4" ]];
+	if [[ "$compression_type" == "lz4" ]];
     then
 	    ( pv "$selected_file" -f | sudo tar -C /tmp/"$rootuuid" -I lz4 -xpf- ) >/tmp/"$rootuuid"-log.txt 2>&1
+    elif [[ "$compression_type" == "lzop" ]];
+    then
+        ( pv "$selected_file" -f | sudo tar -C /tmp/"$rootuuid" --lzop -xpf- ) >/tmp/"$rootuuid"-log.txt 2>&1
+    elif [[ "$compression_type" == "gz" ]];
+    then
+        ( pv "$selected_file" -f | sudo bsdtar -C /tmp/"$rootuuid" -xzpf- ) >/tmp/"$rootuuid"-log.txt 2>&1
     else 
-        ( pv "$selected_file" -f | sudo tar -C /tmp/"$rootuuid" -xapf- ) >/tmp/"$rootuuid"-log.txt 2>&1
+        echo "unknown compression type" >/tmp/"$rootuuid"-log.txt
     fi
 
 	qdbus $dbusRef Set "" value 5
