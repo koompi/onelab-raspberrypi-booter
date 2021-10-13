@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Onelab RaspberryPi Booter
+Version=1.0
+Exec=onelab-rpi-booter
+Icon=/usr/share/icons/onelab/onelab-rpi-booter.png
+Terminal=false
+StartupNotify=true
+Type=Application
+Categories=System;Utility;Core;GTK;FileTools;
+StartupWMClass=onelab-rpi-booter

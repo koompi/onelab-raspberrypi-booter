@@ -1,0 +1,23 @@
+pkgname=onelab-rpi-booter
+pkgver=2.0.0
+pkgrel=0
+pkgdesc="Onelab RaspberryPi Booter RUST"
+arch=("x86_64")
+license=("LGPL2.1")
+depends=("pv" "lz4" "lzop" "tar" "parted" "tar" "gzip" "e2fsprogs" "dosfstools" "gzip" "sudo" "gawk")
+source=(
+    "https://github.com/koompi/onelab-rpi-booter/releases/download/v2.0.0/onelab-rpi-booter-2.0.0-amd64.bin"
+    "${pkgname}.png"
+    "${pkgname}.desktop"
+)
+sha256sums=(
+    'b640cfcd7846ff2d08dcf8ddb929909b54aeb8ed6f301a9024101af6a6977557'
+    '179bb79f8b6d5acaa89c37639150f02238bf8026fdaa8d71b32ed5e571d9f344'
+    '4ce5f51fa659e1bc016092105c7ed25bfa588848e98e846ed3d5d9baa8d76b45'
+)
+
+package() {
+	install -D "${srcdir}/${pkgname}.png" "${pkgdir}/usr/share/icons/onelab/${pkgname}.png"
+    install -D "${srcdir}/onelab-rpi-booter-2.0.0-amd64.bin" "${pkgdir}/usr/bin/${pkgname}"
+    install -D "${srcdir}/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+}
