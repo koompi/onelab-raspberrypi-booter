@@ -1,0 +1,10 @@
+[package]
+name = "onelab-rpi-booter"
+version = "2.0.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+fltk = { version = "*", git = "https://github.com/fltk-rs/fltk-rs" }
+run_script = "*"
