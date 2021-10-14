@@ -1,6 +1,6 @@
 pkgname=onelab-rpi-booter
 pkgver=2.0.0
-pkgrel=0
+pkgrel=2
 pkgdesc="Onelab RaspberryPi Booter RUST"
 arch=("x86_64")
 license=("LGPL2.1")
@@ -11,7 +11,7 @@ source=(
     "${pkgname}.desktop"
 )
 sha256sums=(
-    'b640cfcd7846ff2d08dcf8ddb929909b54aeb8ed6f301a9024101af6a6977557'
+    '38baf33d8f049cfd9392ae5ce07f67601f1035d50adcf5be9bedd6132db4674c'
     '179bb79f8b6d5acaa89c37639150f02238bf8026fdaa8d71b32ed5e571d9f344'
     '4ce5f51fa659e1bc016092105c7ed25bfa588848e98e846ed3d5d9baa8d76b45'
 )
