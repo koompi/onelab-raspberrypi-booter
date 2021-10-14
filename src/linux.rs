@@ -130,14 +130,12 @@ echo password | sudo -S mount "sdcard1" /tmp/"rootuuid"/boot"#
 
 pub fn transfer_files(password: &str, rootuuid: &str, filepath: &str, compression_type: &str) -> (i32, String, String) {
     let options = ScriptOptions::new();
-    let sudo_command = format!("echo {} | sudo -S true", password);
-    let untar_command: String = match compression_type {
-        "lz4" => format!(r#"( pv "{}" -f | sudo tar -C /tmp/"{}" -I lz4 -xpf- ) >/tmp/"{}"-log.txt 2>&1"#, filepath, rootuuid, rootuuid),
-        "lzo" => format!(r#"( pv "{}" -f | sudo tar -C /tmp/"{}" --lzop -xpf- ) >/tmp/"{}"-log.txt 2>&1"#, filepath, rootuuid, rootuuid),
-        "gz" => format!(r#"( pv "{}" -f | sudo bsdtar -C /tmp/"{}" -xzpf- ) >/tmp/"{}"-log.txt 2>&1"#,filepath, rootuuid, rootuuid),
-        _ => format!(r#"echo "unknown compression type" >/tmp/"{}"-log.txt &"#, rootuuid),
+    let command: String = match compression_type {
+        "lz4" => format!(r#"echo {} | sudo -S tar -C /tmp/"{}" -I lz4 -xvpf {} &>/tmp/{}-log.txt"#, password, rootuuid, filepath, rootuuid),
+        "lzo" => format!(r#"echo {} | sudo -S tar -C /tmp/"{}" --lzop -xvpf {} &>/tmp/{}-log.txt"#, password, rootuuid, filepath, rootuuid),
+        "gz" => format!(r#"echo {} | sudo -S tar -C /tmp/"{}" -xzvpf {} &>/tmp/{}-log.txt"#,password,rootuuid, filepath, rootuuid),
+        _ => format!(r#"echo {} | sudo -S tar -C /tmp/"{}" -xavpf {} &>/tmp/{}-log.txt"#, password, rootuuid, filepath, rootuuid),
     };
-    let command = format!("{};{}", sudo_command, untar_command);
     let (code, output, error) = run_script!(
         &command,
         &vec![],
