@@ -6,7 +6,7 @@ mod linux;
 fn set_progress_bar(progress_bar: &mut Progress, value: f64, display_text: &str){
 
     progress_bar.set_value(value);
-    progress_bar.set_label(display_text);
+    progress_bar.set_label(&format!("{}% {}", value, display_text));
     app::check();
 
 }
@@ -152,9 +152,7 @@ fn main() {
                 let choice_splited_vector = choice_output.split(":").collect::<Vec<&str>>();
                 let actual_disk = choice_splited_vector[0].to_owned();
                 let filepath = file_box.filename().as_path().to_str().unwrap().to_string();
-                // let filepath_clone = file_box.filename().as_path().to_str().unwrap().to_string();
-                // let compression_type_vector = filepath_clone.split(".").collect::<Vec<&str>>();
-                // let compression_type = compression_type_vector[compression_type_vector.len()-1];
+
                 progress_bar.show();
                 app::check();
                 
@@ -191,6 +189,10 @@ fn main() {
                         }
 
                         set_progress_bar(&mut progress_bar, counter, "Setting Format Type for Root, Boot, and Swap");
+                        thread::sleep(Duration::from_millis(500));
+                        set_progress_bar(&mut progress_bar, counter, "Setting Format Type for Root, Boot, and Swap");
+                        thread::sleep(Duration::from_millis(500));
+                        set_progress_bar(&mut progress_bar, counter, "Setting Format Type for Root, Boot, and Swap...");
                         thread::sleep(Duration::from_millis(500));
                         set_progress_bar(&mut progress_bar, counter, "Setting Format Type for Root, Boot, and Swap...");
                         thread::sleep(Duration::from_millis(500));
@@ -291,10 +293,60 @@ fn main() {
                     }
                 }
 
-                set_progress_bar(&mut progress_bar,90.0, "Finishing Setup Processes");
-                let (_code, _output, _error) = linux::cleanup_mount_after_run(&current_password, &rootuuid);
-                
+                let clone_current_password = current_password.clone();
+                let clone_rootuuid = rootuuid.clone();
 
+                let (thread_message_sender, thread_message_reciever) = mpsc::channel::<&str>();
+
+                set_progress_bar(&mut progress_bar,90.0, "Finishing Setup Processes");
+                thread::spawn(move || {
+                    thread_message_sender.send("finishing setup starting").unwrap();
+                    let (_code, _output, _error) = linux::cleanup_mount_after_run(&clone_current_password, &clone_rootuuid);
+                    thread_message_sender.send("finishing setup finished").unwrap();
+                });
+
+                counter = 90.0;
+
+                loop {
+                    if thread_message_reciever.try_recv().unwrap_or("") == "finishing setup finished"{
+                        break;
+                    }
+                    else {
+                        if counter < 99.0 {
+                            counter+=1.0;
+                        }
+                        else {
+                            counter = counter;
+                        }
+                    }
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes");
+                    thread::sleep(Duration::from_millis(500));
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes");
+                    thread::sleep(Duration::from_millis(500)); 
+
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes.");
+                    thread::sleep(Duration::from_millis(500));
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes.");
+                    thread::sleep(Duration::from_millis(500)); 
+
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes..");
+                    thread::sleep(Duration::from_millis(500));
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes..");
+                    thread::sleep(Duration::from_millis(500)); 
+
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes...");
+                    thread::sleep(Duration::from_millis(500));
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes...");
+                    thread::sleep(Duration::from_millis(500)); 
+
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes....");
+                    thread::sleep(Duration::from_millis(500));
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes....");
+                    thread::sleep(Duration::from_millis(500)); 
+
+                    set_progress_bar(&mut progress_bar, counter, "Finishing Setup Processes.....");
+                    thread::sleep(Duration::from_millis(500)); 
+                }
                 set_progress_bar(&mut progress_bar,100.0, "Finished!");
             }
             if msg == "browse_go" {
