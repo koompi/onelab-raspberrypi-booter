@@ -1,23 +1,23 @@
 pkgname=onelab-rpi-booter
-pkgver=2.0.0
-pkgrel=2
-pkgdesc="Onelab RaspberryPi Booter RUST"
+pkgver=2.1.0
+pkgrel=1
+pkgdesc="Onelab RaspberryPi Booter built with RUST FLTK"
 arch=("x86_64")
-license=("LGPL2.1")
+license=("LGPL2.0")
 depends=("pv" "lz4" "lzop" "tar" "parted" "tar" "gzip" "e2fsprogs" "dosfstools" "gzip" "sudo" "gawk")
 source=(
-    "https://github.com/koompi/onelab-rpi-booter/releases/download/v2.0.0/onelab-rpi-booter-2.0.0-amd64.bin"
+    "https://github.com/koompi/${pkgname}/releases/download/v${pkgver}/${pkgname}-${pkgver}-${arch}.bin"
     "${pkgname}.png"
     "${pkgname}.desktop"
 )
 sha256sums=(
-    '38baf33d8f049cfd9392ae5ce07f67601f1035d50adcf5be9bedd6132db4674c'
+    '9c9434dab07787a8eff6d1c15dc155fa773d59e1f81e69b0b4199e7a7f57fba6'
     '179bb79f8b6d5acaa89c37639150f02238bf8026fdaa8d71b32ed5e571d9f344'
     '4ce5f51fa659e1bc016092105c7ed25bfa588848e98e846ed3d5d9baa8d76b45'
 )
 
 package() {
 	install -D "${srcdir}/${pkgname}.png" "${pkgdir}/usr/share/icons/onelab/${pkgname}.png"
-    install -D "${srcdir}/onelab-rpi-booter-2.0.0-amd64.bin" "${pkgdir}/usr/bin/${pkgname}"
+    install -D "${srcdir}/${pkgname}-${pkgver}-${arch}.bin" "${pkgdir}/usr/bin/${pkgname}"
     install -D "${srcdir}/${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
 }
