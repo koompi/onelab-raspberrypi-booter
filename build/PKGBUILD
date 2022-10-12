@@ -1,5 +1,5 @@
 pkgname=onelab-rpi-booter
-pkgver=2.1.0
+pkgver=2.2.0
 pkgrel=1
 pkgdesc="Onelab RaspberryPi Booter built with RUST FLTK"
 arch=("x86_64")
@@ -11,7 +11,7 @@ source=(
     "${pkgname}.desktop"
 )
 sha256sums=(
-    '9c9434dab07787a8eff6d1c15dc155fa773d59e1f81e69b0b4199e7a7f57fba6'
+    '7c19811f30c5da6c2bc0a6963331bb3116b9ee74c625bd11e1b3e0d5cb50cedb'
     '179bb79f8b6d5acaa89c37639150f02238bf8026fdaa8d71b32ed5e571d9f344'
     '4ce5f51fa659e1bc016092105c7ed25bfa588848e98e846ed3d5d9baa8d76b45'
 )
