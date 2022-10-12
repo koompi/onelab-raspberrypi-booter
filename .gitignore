@@ -1,2 +1,5 @@
 /target
-/Cargo.lock
+/build/*.zst
+/build/pkg
+/build/src
+/build/*.bin
