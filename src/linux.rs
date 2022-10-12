@@ -64,9 +64,9 @@ pub fn create_partition(password: &str, drive: &str) -> (i32, String, String) {
     let options = ScriptOptions::new();
     let command = format!(
 r#"echo {} | sudo -S parted {} mklabel msdos --script;
-echo {} | sudo -S parted {} mkpart primary fat32 0% 106M --script;
-echo {} | sudo -S parted {} mkpart primary ext4 106M 80% --script;
-echo {} | sudo -S parted {} mkpart primary linux-swap 80% 100% --script;
+echo {} | sudo -S parted {} mkpart primary fat32 0% 306M --script;
+echo {} | sudo -S parted {} mkpart primary ext4 306M 88% --script;
+echo {} | sudo -S parted {} mkpart primary linux-swap 88% 100% --script;
 "#, password, drive, password, drive, password, drive, password, drive);
     let (code, output, error) = run_script!(
         &command,
