@@ -31,7 +31,7 @@ fn start(start_button: &mut Button, browse_button: &mut Button, choice_box: &mut
 fn browse_file(file_frame: &mut Frame) -> FileDialog {
     let mut file_box = FileDialog::new(FileDialogType::BrowseFile);
 
-    file_box.set_directory("/").unwrap();
+    file_box.set_directory(&String::from("/")).unwrap();
     file_box.set_title("Select File Boot");
     file_box.set_filter("*.{lzo,lz4,gz}");
     file_box.show();
